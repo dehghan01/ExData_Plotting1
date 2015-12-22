@@ -7,12 +7,9 @@ createPlot1 = function(filename = "household_power_consumption.txt"){
 #read data from current wd
 .readData = function(filename){
     #read data and subset accordingly
-    data_df <- tbl_df(data.table::fread(filename, sep = ";"))
+    data_df <-read.table(filename, sep=";", header=TRUE,na.strings="?")
     data_df$Date <- as.Date(data_df$Date, format = "%d/%m/%Y")
     data <- data_df %>% subset(Date == "2007-02-01" | Date == "2007-02-02")
-    
-    #set correct class of variables for plotting
-    data$Global_active_power <- as.numeric(data$Global_active_power)
     
     data
 } 

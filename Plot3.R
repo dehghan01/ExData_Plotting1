@@ -6,17 +6,13 @@ createPlot3 = function(filename = "household_power_consumption.txt"){
 
 .readData = function(filename){
     #read and subset data
-    data_df <- tbl_df(data.table::fread(filename, sep = ";"))
+    data_df <-read.table(filename, sep=";", header=TRUE,na.strings="?")
     data_df$Date <- as.Date(data_df$Date, format = "%d/%m/%Y")
     data <- data_df %>% subset(Date == "2007-02-01" | Date == "2007-02-02")
     
     #create new datetime variable
     data <-  data %>% mutate(DateTime = paste(data$Date, data$Time)) %>% select(Global_active_power, Voltage, Sub_metering_1:DateTime)
     data$DateTime <- strptime(data$DateTime, format = "%Y-%m-%d %H:%M:%S")
-    
-    #set correct class of variables for plotting
-    cols = c(1:5)
-    data[,cols] <- apply(data[,cols], 2, function(x) as.numeric(x))
     
     data
 }
